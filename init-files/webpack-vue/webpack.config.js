@@ -130,7 +130,7 @@ var webpackconfig = {
     },
     plugins: [
         // 样式分离插件
-        new ExtractTextPlugin( util.joinFormat(path.relative(config.alias.jsDest, path.join(config.alias.cssDest, "boot-[chunkhash:8].css"))))
+        new ExtractTextPlugin( util.joinFormat(path.relative(config.alias.jsDest, path.join(config.alias.cssDest, "[name]-[chunkhash:8].css"))))
     ]
 };
 
