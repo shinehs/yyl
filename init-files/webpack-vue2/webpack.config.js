@@ -84,7 +84,26 @@ var webpackconfig = {
         rules: [{
             test: /\.js$/,
             exclude: '/node_modules/',
-            loader: 'babel-loader'
+            loader: 'babel-loader',
+            query: {
+                sourceRoot: path.join(__dirname, 'node_modules'),
+                babelrc: false,
+                cacheDirectory: true,
+                dirname: path.join(__dirname, 'node_modules'),
+                presets: [
+                    'es2015',
+                    'stage-0'
+                ],
+                // presets: [
+                //     'babel-preset-es2015',
+                //     'babel-preset-stage-0'
+                // ].map(require.resolve),
+                // plugins: [
+                //     'babel-plugin-transform-runtime'
+                // ].map(require.resolve)
+
+            }
+
             // query: {
             //     presets: ['babel-preset-es2015'].map(require.resolve)
             // }
