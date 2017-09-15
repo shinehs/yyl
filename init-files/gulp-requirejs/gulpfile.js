@@ -566,15 +566,30 @@ var
             
             var vars = gulp.env.vars;
             return gulp.src(files)
-                .filter('**/*.js')
+                .pipe(filter('**/*.js'))
                 .pipe(plumber())
                 .pipe(jshint.reporter('default'))
                 .pipe(jshint())
-                /* 合并主文件中通过 requirejs 引入的模块 [start] */
-                .pipe(requirejsOptimize({
-                    optimize: 'none',
-                    mainConfigFile: util.joinFormat(vars.srcRoot, 'js/rConfig/rConfig.js')
+                .pipe(through.obj(function(file, enc, cb){
+                    var 
+                        optimizeOptions = {
+                            mainConfigFile: util.joinFormat(vars.srcRoot, 'js/rConfig/rConfig.js'),
+                            logLevel: 2,
+                            baseUrl: util.joinFormat(vars.srcRoot, 'js/rConfig'),
+                            generateSourceMaps: false,
+                            out: function(){
+
+                            },
+                            include: '',
+
+                        };
+
                 }))
+                /* 合并主文件中通过 requirejs 引入的模块 [start] */
+                // .pipe(requirejsOptimize({
+                //     optimize: 'none',
+                //     mainConfigFile: util.joinFormat(vars.srcRoot, 'js/rConfig/rConfig.js')
+                // }))
                 .pipe(iConfig.isCommit?uglify(): fn.blankPipe())
                 .pipe(rename(function(path){
                     path.basename = path.basename.replace(/^[pj]-/g,'');
@@ -592,7 +607,7 @@ var
             var vars = gulp.env.vars;
             return gulp.src(files)
                 .pipe(plumber())
-                .filter('**/*.js')
+                .pipe(filter('**/*.js'))
                 .pipe(iConfig.isCommit?uglify():fn.blankPipe())
                 .pipe(gulp.dest( vars.jslibDest ));
         },
@@ -604,7 +619,7 @@ var
             
             var vars = gulp.env.vars;
             return gulp.src(files)
-                .filter('**/*.json')
+                .pipe(filter('**/*.json'))
                 .pipe(plumber())
                 .pipe(iConfig.isCommit?uglify():fn.blankPipe())
                 .pipe(gulp.dest( vars.jsDest ));
@@ -757,8 +772,15 @@ gulp.task('requirejsToDest', function(){
     if(!iConfig){
         return;
     }
-
-    // TODO
+    // 需要执行 requirejs 的文件列表
+    
+    return streamEvent.requirejsToDest([
+        util.joinFormat(iConfig.alias.srcRoot, 'components/p-*/p-*.js'),
+        util.joinFormat(iConfig.alias.srcRoot, 'js/**/*.js'),
+        '!' + util.joinFormat(iConfig.alias.srcRoot, 'js/lib/**'),
+        '!' + util.joinFormat(iConfig.alias.srcRoot, 'js/rConfig/**'),
+        '!' + util.joinFormat(iConfig.alias.srcRoot, 'js/widget/**')
+    ]);
 
 });
 gulp.task('jslibToDest', function(){
@@ -1194,7 +1216,7 @@ gulp.task('watch', ['all'], function() {
     if(!iConfig){
         return;
     }
-    var vars = gulp.env.vars;
+    // var vars = gulp.env.vars;
 
     // TODO
 
