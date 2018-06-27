@@ -1,4 +1,7 @@
 # 版本信息
+## 2.22.6 (2018-06-14)
+* [ADD] 新增 `webpack, webpack-vue2` 页面 `process.env.dev` 变量
+
 ## 2.22.5 (2018-06-14)
 * [ADD] 新增 `config.js` `disableHash` 配置项用于禁止项目生成 hash 文件
 

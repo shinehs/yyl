@@ -45,6 +45,10 @@ gulp.task('webpack', (done) => {
   if (iEnv.isCommit) {
     iWconfig.plugins.push(new uglifyjsWebpackPlugin());
     iWconfig.devtool = false;
+  } else {
+    iWconfig.plugins.push(new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify("development")
+    }));
   }
 
   if (iEnv.ver == 'remote' || iEnv.isCommit || iEnv.remote) {
@@ -175,12 +179,14 @@ gulp.task('resource', (done) => {
 
 // + rev
 gulp.task('rev-build', (done) => {
-  supercall.rev.build(iEnv).then(() => {
+  supercall.rev.build(util.extend({}, iEnv, {
+    revIgnore: /async_component/
+  })).then(() => {
     done();
   }).catch((err) => {
     log('msg', 'error', `rev-build error: ${err.message || err.details || err}`);
     done();
-  });;
+  });
 });
 
 gulp.task('rev-update', (done) => {
