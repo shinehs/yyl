@@ -79,11 +79,6 @@ module.exports = function(ctx) {
   const iArgv = util.makeArray(arguments);
   const iEnv = util.envPrase(arguments);
 
-  var iVer = process.versions.node;
-  if (iVer.localeCompare('4.0.0') < 0) {
-    return util.msg.error('please makesure your node >= 4.0.0');
-  }
-
   if (!isNaN(iEnv.logLevel) && iEnv.logLevel !== true) {
     events.server.setLogLevel(iEnv.logLevel, true, true);
   }

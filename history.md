@@ -1,5 +1,8 @@
 # 版本信息
 
+## 2.26.1 (2019-01-10)
+* [DEL] 去掉 node 版本 校验
+
 ## 2.26.0 (2018-09-18)
 * [FIX] `webpack.publish.js`设置process.env.NODE_ENV=production
 * [EDIT] 新增vue2项目 通用alias
